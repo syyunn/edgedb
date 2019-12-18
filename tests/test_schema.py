@@ -3178,7 +3178,7 @@ class TestDescribe(tb.BaseSchemaLoadTest):
                 SELECT
                     __subject__.image
                 ) {
-                    origexpr := r'__subject__.image';
+                    origexpr := '__subject__.image';
                 };
                 required single property image -> std::str;
             };
@@ -3194,7 +3194,7 @@ class TestDescribe(tb.BaseSchemaLoadTest):
                 SELECT
                     __subject__.image
                 ) {
-                    SET origexpr := r'__subject__.image';
+                    SET origexpr := '__subject__.image';
                 };
             };
             '''
@@ -3267,7 +3267,7 @@ class TestDescribe(tb.BaseSchemaLoadTest):
                     SELECT
                         __subject__@prop1
                     ) {
-                        orig_subjectexpr := r'__subject__@prop1';
+                        orig_subjectexpr := '__subject__@prop1';
                     };
                     constraint std::exclusive on (WITH
                         MODULE test
@@ -3275,7 +3275,7 @@ class TestDescribe(tb.BaseSchemaLoadTest):
                         (__subject__@source, __subject__@lang)
                     ) {
                         orig_subjectexpr :=
-                            r'(__subject__@source, __subject__@lang)';
+                            '(__subject__@source, __subject__@lang)';
                     };
                 };
             };
@@ -3340,7 +3340,7 @@ class TestDescribe(tb.BaseSchemaLoadTest):
             abstract constraint std::len_value on (len(<std::str>__subject__))
             {
                 errmessage := 'invalid {__subject__}';
-                orig_subjectexpr := r'len(<std::str>__subject__)';
+                orig_subjectexpr := 'len(<std::str>__subject__)';
             };
             ''',
 
