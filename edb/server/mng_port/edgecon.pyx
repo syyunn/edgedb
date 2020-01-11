@@ -1746,29 +1746,46 @@ cdef class EdgeConnection:
 
         # Now parse the embedded dump header message:
 
+        print("=============RESTORE===============")
+
         # Ignore headers
         headers_num = self.buffer.read_int16()
+        print('# headers', headers_num)
         for _ in range(headers_num):
-            self.buffer.read_int16()
+            print('header', _, self.buffer.read_int16())
             self.buffer.read_len_prefixed_bytes()
 
         proto_major = self.buffer.read_int16()
         proto_minor = self.buffer.read_int16()
+        print('dump ver', proto_major, proto_minor)
         if proto_major != PROTO_VER_MAJOR or proto_minor != PROTO_VER_MINOR:
             raise errors.ProtocolError('unsupported dump version')
 
         schema_ddl = self.buffer.read_len_prefixed_bytes()
+        print('schema ddl', schema_ddl)
 
         ids_num = self.buffer.read_int32()
+        print('number of ids', ids_num)
         schema_ids = []
         for _ in range(ids_num):
+            print('  reading id #', _)
+            b1 = self.buffer.read_len_prefixed_utf8()
+            print('  b1 = ', b1)
+            b2 = self.buffer.read_len_prefixed_utf8()
+            print('  b2 = ', b2)
+            b3 = self.buffer.read_bytes(16)
+            print('  b3 = ', b3)
             schema_ids.append((
-                self.buffer.read_len_prefixed_utf8(),
-                self.buffer.read_len_prefixed_utf8(),
-                self.buffer.read_bytes(16),
+                b1,
+                b2,
+                b3,
             ))
 
+        print('done reading ids')
+
         block_num = <uint32_t>self.buffer.read_int32()
+
+        print('number of blocks', block_num)
         blocks = []
         for _ in range(block_num):
             blocks.append((
